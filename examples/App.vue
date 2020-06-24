@@ -39,8 +39,8 @@ html,body{
   display: flex;
 }
 #app{
-  width: 400px;
-  height: 800px;
+  width: 300px;
+  height: 600px;
   margin: auto;
   border: 1px solid #000;
 }

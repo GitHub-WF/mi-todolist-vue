@@ -1,12 +1,12 @@
 <template>
-  <div id="add">
-
+  <div id="rightlist">
+    RightList
   </div>
 </template>
 
 <script>
 export default {
-    name: "Add",
+    name: "RightList",
     data() {
       return {
 

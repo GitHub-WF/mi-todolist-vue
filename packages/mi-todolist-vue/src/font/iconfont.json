@@ -1,0 +1,30 @@
+{
+  "id": "1903669",
+  "name": "mi-todolist-vue",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "8989929",
+      "name": "螺母",
+      "font_class": "luomu",
+      "unicode": "e601",
+      "unicode_decimal": 58881
+    },
+    {
+      "icon_id": "959111",
+      "name": "下箭头",
+      "font_class": "xiajiantou",
+      "unicode": "e649",
+      "unicode_decimal": 58953
+    },
+    {
+      "icon_id": "15067762",
+      "name": "竖点",
+      "font_class": "more2",
+      "unicode": "e600",
+      "unicode_decimal": 58880
+    }
+  ]
+}

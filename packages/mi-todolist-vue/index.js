@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import MiTodolistVue from './src/mi-todolist-vue.vue' // 引入主代码
+import "./src/font/iconfont.css" // 引入字体文件
 let MiTodolistVueConstructor = Vue.extend(MiTodolistVue) // 生成Vue构造器子类
 
 MiTodolistVue.install = (Vue) => {
