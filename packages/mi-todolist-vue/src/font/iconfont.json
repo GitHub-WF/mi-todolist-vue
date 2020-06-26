@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "291487",
+      "name": "放大镜",
+      "font_class": "fangdajing",
+      "unicode": "e618",
+      "unicode_decimal": 58904
+    },
+    {
       "icon_id": "8989929",
       "name": "螺母",
       "font_class": "luomu",

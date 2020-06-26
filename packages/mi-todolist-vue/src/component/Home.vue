@@ -25,13 +25,20 @@
       <div class="container">
         <slot name="middle"></slot>
         <div v-if="chooseLeft">
-          <div class="search"></div>
+          <div class="search">
+            <div>
+              <i class="iconfont icon-fangdajing"></i>
+              <input type="text" placeholder="搜索便签">
+            </div>
+          </div>
           <!-- 便签列表 -->
           <LeftList></LeftList>
         </div>
         <div v-else>
-          <div class="search"></div>
-          <!-- 便签列表 -->
+          <div class="search">
+            
+          </div>
+          <!-- 待办列表 -->
           <RightList></RightList>
         </div>
       </div>
@@ -125,4 +132,26 @@
         opacity: 0;
         top: 10px
       }
+  .scroll
+    > .container
+      > div
+        > .search
+          height 30px
+          padding 5px 0
+          > div
+            height 100%
+            position relative
+            > i
+              position absolute
+              top 6px
+              left 10px
+            > input
+              width 100%
+              height 100%
+              border none
+              padding 0
+              outline none
+              text-indent 30px
+              background-color #ededed
+              border-radius 15px
 </style>
