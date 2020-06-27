@@ -12,12 +12,14 @@ export default {
       el: '.containter',
       oldData: [
         {
-          name: 111,
-          content: '111'
+          title: 111,
+          content: '111',
+          time: Date.now
         },
         {
-          name: 222,
-          content: '222'
+          title: 111,
+          content: '111',
+          time: Date.now
         }
       ],
       callback: newData

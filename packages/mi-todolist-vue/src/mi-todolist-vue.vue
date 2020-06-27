@@ -1,6 +1,6 @@
 <template>
   <div class='mitodolistvue'>
-    <Home :controlMask="controlMask" :showMask="showMask" :chooseLeft="chooseLeft">
+    <Home :controlMask="controlMask" :showMask="showMask" :chooseLeft="chooseLeft" :newData="newData" @maskDown="maskDown">
       <!-- 插槽 -->
       <template v-slot:middle>
         <div class="middle">
@@ -18,8 +18,8 @@
         </div>
       </template>
     </Home>
-    <transition name="mask">
-      <div class="mask" v-if="showMask" @click="controlMask(false)"></div>
+    <transition name="mask" @after-leave="afterMaskLeave">
+      <div class="mask" v-show="showMask" ref="mask" @click="controlMask(false)"></div>
     </transition>
   </div>
 </template>
@@ -59,8 +59,14 @@
           this.isRotate = true // 旋转箭头
         }
       },
+      maskDown () {
+        this.$refs.mask.style.transform = 'translateY(50px)'
+      },
+      afterMaskLeave () {
+        this.$refs.mask.style.transform = ''
+      }
     },
-    mounted () {
+    created () {
       this.newData = this.oldData;
     },
     beforeDestroy () {
@@ -78,6 +84,7 @@
     padding 10px
     box-sizing border-box
     position relative
+    overflow hidden
     .mask
       width 100%
       height 100%

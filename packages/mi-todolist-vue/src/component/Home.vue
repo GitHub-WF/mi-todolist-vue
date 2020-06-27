@@ -24,19 +24,24 @@
     <div class="scroll">
       <div class="container">
         <slot name="middle"></slot>
-        <div v-if="chooseLeft">
+        <div :class="{transup: isUp}" v-if="chooseLeft">
           <div class="search">
             <div>
               <i class="iconfont icon-fangdajing"></i>
-              <input type="text" placeholder="搜索便签">
+              <input type="text" placeholder="搜索便签" @focus="inSearch" @blur="outSearch"  :class="{indent: isUp}">
+              <span :class="{disleft: isUp}">取消</span>
             </div>
           </div>
           <!-- 便签列表 -->
-          <LeftList></LeftList>
+          <LeftList :newData='newData'></LeftList>
         </div>
-        <div v-else>
+        <div :class="{transup: isUp}" v-else>
           <div class="search">
-            
+            <div>
+              <i class="iconfont icon-fangdajing"></i>
+              <input type="text" placeholder="搜索待办" @focus="inSearch" @blur="outSearch"  :class="{indent: isUp}">
+              <span :class="{disleft: isUp}">取消</span>
+            </div>
           </div>
           <!-- 待办列表 -->
           <RightList></RightList>
@@ -56,9 +61,10 @@
     data () {
       return {
         isOpenSetting: false, // 是否打开设置列表
+        isUp: false
       }
     },
-    props: ['controlMask', 'showMask', 'chooseLeft'],
+    props: ['controlMask', 'showMask', 'chooseLeft', 'newData'],
     components: {
       LeftList,
       RightList,
@@ -68,6 +74,16 @@
       openSetting () {
         this.isOpenSetting = true // 打开设置列表
         this.controlMask(this.isOpenSetting) // 显示mask
+      },
+      inSearch () {
+        this.isUp = true
+        this.controlMask(this.isUp) // 显示mask
+        this.$emit('maskDown') // 触发mask下移
+      },
+      outSearch () {
+        this.isUp = false
+        this.controlMask(this.isUp) // 关闭mask
+        this.$emit('maskDown') // 关闭mask下移
       }
     },
     watch: {
@@ -134,7 +150,11 @@
       }
   .scroll
     > .container
+      > .transup
+        transform translateY(-60px)
       > div
+        background-color #fff
+        transition transform 0.1s linear 0s
         > .search
           height 30px
           padding 5px 0
@@ -143,7 +163,7 @@
             position relative
             > i
               position absolute
-              top 6px
+              top 4px
               left 10px
             > input
               width 100%
@@ -154,4 +174,16 @@
               text-indent 30px
               background-color #ededed
               border-radius 15px
+              transition width 0.1s linear 0s
+              &.indent
+                width 80%
+            > span
+              position absolute
+              top 6px
+              right -40px
+              color #0688ff
+              font-size 14px
+              transition right 0.1s linear 0s
+              &.disleft
+                right 5px
 </style>

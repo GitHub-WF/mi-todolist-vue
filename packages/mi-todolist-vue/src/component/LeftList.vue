@@ -1,6 +1,13 @@
 <template>
   <div id="leftlist">
-    LeftList
+    <!-- 无数据 -->
+    <div v-if="newData.length">
+      无数据
+    </div>
+    <!-- 有数据 -->
+    <div v-else>
+      有数据
+    </div>
   </div>
 </template>
 
@@ -12,9 +19,7 @@ export default {
 
       };
     },
-    props: {
-
-    },
+    props: ['newData'],
     components: {
 
     },
@@ -31,7 +36,7 @@ export default {
 
     },
     mounted() {
-
+      console.log(this.newData)
     }
 };
 </script>
