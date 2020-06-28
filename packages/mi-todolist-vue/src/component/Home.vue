@@ -98,15 +98,18 @@
 
 <style lang='stylus' rel='stylesheet/stylus' scoped>
  .home
-  height 90px
+  height 100%
+  position relative
   span
     user-select none // 控制文字选中
   .top
     height 30px
+    width 100%
     line-height 30px
     font-size 24px
     font-weight 100
     position relative
+    float left
     > .middle
       position absolute
       top 50%
@@ -149,10 +152,15 @@
         top: 10px
       }
   .scroll
+    padding-top 30px
+    height 100%
+    box-sizing border-box
     > .container
+      min-height 100%
       > .transup
         transform translateY(-60px)
-      > div
+      > div:nth-child(2)
+        padding-top 30px
         background-color #fff
         transition transform 0.1s linear 0s
         > .search

@@ -6,6 +6,13 @@
   "description": "",
   "glyphs": [
     {
+      "icon_id": "14425623",
+      "name": "bsm_便签-",
+      "font_class": "bsm_bianqian-",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    },
+    {
       "icon_id": "291487",
       "name": "放大镜",
       "font_class": "fangdajing",

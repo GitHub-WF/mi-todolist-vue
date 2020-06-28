@@ -100,10 +100,12 @@
       opacity: 0;
     }
     .middle
+      width 100%
       height 30px
       line-height 30px
       font-size 24px
       font-weight 100
+      float left
       .difColor
         color #ccc
       span
