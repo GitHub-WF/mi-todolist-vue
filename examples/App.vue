@@ -14,12 +14,14 @@ export default {
         {
           title: 111,
           content: '111',
-          time: Date.now
+          time: Date.now(),
+          id: 1
         },
         {
           title: 111,
           content: '111',
-          time: Date.now
+          time: Date.now(),
+          id: 2
         }
       ],
       callback: newData
