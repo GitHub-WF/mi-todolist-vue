@@ -10,7 +10,7 @@
     <!-- 有数据 -->
     <div v-else class="havedata">
       <ul class="ulList" ref="ulList">
-        <li v-for="(item) in newData" :key="item.id" :ref="item.id" @mousedown="downMouse(item.id)" @mouseup="upMouse(item.id)">
+        <li v-for="(item, index) in newData" :key="item.id" :ref="item.id" @mousedown="downMouse(item.id)" @mouseup="upMouse(item.id)">
           <span>{{item.title}}</span>
           <span>{{item.content}}</span>
           <span>{{item.time}}</span>
@@ -30,25 +30,30 @@ export default {
           top: 0,
           left: 0
         },
-        moveLiId: null
+        moveLiId: null,
+        moveIndex: 0,
+        flag: true
       };
     },
-    props: ['newData'],
+    props: ['newData', 'chooseLeft'],
     components: {
 
     },
     methods: {
       docMouseUp () {
-        this.$refs.ulList.childNodes.forEach(item => {
-          item.style.transform = 'scale(1)'
-        })
-        this.$refs[this.moveLiId][0].style.zIndex = 0
-        this.$refs[this.moveLiId][0].style.border = 'none'
-        document.removeEventListener('mousemove', this.moveMouse)
+        if (this.moveLiId) {
+          this.$refs.ulList.childNodes.forEach(item => {
+            item.style.transform = 'scale(1)'
+          })
+          this.$refs[this.moveLiId][0].style.zIndex = 0
+          this.$refs[this.moveLiId][0].style.border = 'none'
+          document.removeEventListener('mousemove', this.moveMouse)
+        }
       },
       downMouse (id, $event) {
         var e = $event || window.event
         this.moveLiId = id
+        this.flag = true
         this.liPrePosition.top = e.pageY
         this.liPrePosition.left = e.pageX
         this.$refs[id][0].style.transform = 'scale(0.95)'
@@ -61,13 +66,31 @@ export default {
       },
       moveMouse (event) {
         var e = event || window.event
+        var moveLiNode = this.$refs[this.moveLiId][0]
         var xDis = e.pageX - this.liPrePosition.left
         var yDis = e.pageY - this.liPrePosition.top
-        this.$refs[this.moveLiId][0].style.transform = `translate(${xDis}px, ${yDis}px) scale(0.95)`
+        moveLiNode.style.transform = `translate(${xDis}px, ${yDis}px) scale(0.95)`
+        // 处理Li之间的位移问题
+        // 获取当前元素具体顶部距离
+        this.moveLiPositionY = moveLiNode.offsetTop + moveLiNode.clientHeight / 2 + yDis
+        // 获取当前元素的index
+        if (this.flag) {
+          this.moveIndex = this.listLiDis.findIndex(dis => {
+          this.flag = false
+          return this.moveLiPositionY > dis - 3 && this.moveLiPositionY < dis + 3
+        })
+        }
+        console.log(this.moveIndex)
+        // 判断相互位置并交换数据
+        this.listLiDis.forEach((dis, index) => {
+          
+        })
       }
     },
     computed: {
-
+      liDis () {
+        return this.listLiDis[1] - this.listLiDis[0]
+      }
     },
     watch: {
 
@@ -76,6 +99,11 @@ export default {
 
     },
     mounted() {
+      // 创建li距离数组数据
+      this.$refs.ulList.childNodes.forEach(item => {
+        var disData = item.offsetTop + item.clientHeight / 2
+        this.listLiDis.push(disData)
+      })
       // 给document添加mouseup事件，当鼠标释放，所有li的scale(1)
       document.addEventListener('mouseup', this.docMouseUp)
       // 便签销毁时，给document解绑mouseup事件
@@ -113,7 +141,6 @@ export default {
         margin 0
         padding 0
         > li
-          width 100%
           list-style none
           background-color #ccc
           margin-top 5px

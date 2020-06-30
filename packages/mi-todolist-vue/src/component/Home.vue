@@ -33,7 +33,7 @@
             </div>
           </div>
           <!-- 便签列表 -->
-          <LeftList :newData='newData'></LeftList>
+          <LeftList :newData='newData' :chooseLeft='chooseLeft'></LeftList>
         </div>
         <div :class="{transup: isUp}" v-else>
           <div class="search">

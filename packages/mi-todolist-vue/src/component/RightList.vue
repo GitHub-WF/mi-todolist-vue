@@ -9,7 +9,7 @@ export default {
     name: "RightList",
     data() {
       return {
-
+        
       };
     },
     props: {
