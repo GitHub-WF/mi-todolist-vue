@@ -32,7 +32,8 @@ export default {
         },
         moveLiId: null,
         moveIndex: 0,
-        flag: true
+        flag: true, // 只获取一次index标识
+        moveLiPosY: 0
       };
     },
     props: ['newData', 'chooseLeft'],
@@ -80,10 +81,59 @@ export default {
           return this.moveLiPositionY > dis - 3 && this.moveLiPositionY < dis + 3
         })
         }
-        console.log(this.moveIndex)
         // 判断相互位置并交换数据
         this.listLiDis.forEach((dis, index) => {
-          
+          // 判断移动li所在位置区间
+          if (this.moveLiPositionY >= this.listLiDis[index] && this.moveLiPositionY <= this.listLiDis[index + 1]) {
+            console.log(index, index + 1)
+            // 判断在区间中是上移或下移
+            if (yDis - this.moveLiPosY > 0) {
+              // 下移
+              // 保存移动li位置(用来判断上移或下移)
+              this.moveLiPosY = yDis
+              console.log('下移', this.moveIndex)
+              // 下移时，当前li的index与区间index不等时，则该交叉index上移
+              if (this.moveIndex !== index) {
+                // 获取已位移距离
+                var li = this.$refs.ulList.childNodes[index];
+                var preTranslateY = li.style.transform.replace(/[^0-9\-]/ig,"") * 1
+                console.log(li.style.transform, preTranslateY)
+                if (preTranslateY) {
+                  this.$refs.ulList.childNodes[index].style.transform = `translateY(0px)`
+                } else {
+                  this.$refs.ulList.childNodes[index].style.transform = `translateY(-${this.liDis}px)`
+                }
+              }
+            } else if(yDis - this.moveLiPosY < 0) {
+              // 上移
+              // 保存移动li位置(用来判断上移或下移)
+              this.moveLiPosY = yDis
+              console.log('上移', this.moveIndex)
+              // 上移时，当前li的index与区间index不等时，则该交叉index下移
+              if (this.moveIndex !== index + 1) {
+                // 获取已位移距离
+                var li = this.$refs.ulList.childNodes[index + 1];
+                var preTranslateY = li.style.transform.replace(/[^0-9\-]/ig,"") * 1
+                console.log(li.style.transform, preTranslateY)
+                if (preTranslateY) {
+                  this.$refs.ulList.childNodes[index + 1].style.transform = `translateY(0px)`
+                } else {
+                  this.$refs.ulList.childNodes[index + 1].style.transform = `translateY(${this.liDis}px)`
+                }
+              }
+            }
+          } else {
+            // 区间之外的情况
+            if (this.moveLiPositionY < this.listLiDis[0]) {
+              // 顶部
+              console.log('顶部', index)
+              this.$refs.ulList.firstChild.style.transform = `translateY(${this.liDis}px)`
+            } else if (this.moveLiPositionY > this.listLiDis[this.listLiDis.length - 1]) {
+              // 底部
+              console.log('底部', index)
+              this.$refs.ulList.lastChild.style.transform = `translateY(-${this.liDis}px)`
+            }
+          }
         })
       }
     },
