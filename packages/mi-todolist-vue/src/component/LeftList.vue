@@ -33,7 +33,8 @@ export default {
         moveLiId: null,
         moveIndex: 0,
         flag: true, // 只获取一次index标识
-        moveLiPosY: 0
+        moveLiPosY: 0,
+        preIndex: 0
       };
     },
     props: ['newData', 'chooseLeft'],
@@ -77,9 +78,9 @@ export default {
         // 获取当前元素的index
         if (this.flag) {
           this.moveIndex = this.listLiDis.findIndex(dis => {
-          this.flag = false
-          return this.moveLiPositionY > dis - 3 && this.moveLiPositionY < dis + 3
-        })
+            this.flag = false
+            return this.moveLiPositionY > dis - 3 && this.moveLiPositionY < dis + 3
+          })
         }
         // 判断相互位置并交换数据
         this.listLiDis.forEach((dis, index) => {
@@ -93,12 +94,13 @@ export default {
               this.moveLiPosY = yDis
               console.log('下移', this.moveIndex)
               // 下移时，当前li的index与区间index不等时，则该交叉index上移
-              if (this.moveIndex !== index) {
+              if (this.moveIndex !== index && this.preIndex !== index) {
                 // 获取已位移距离
+                this.preIndex = index
                 var li = this.$refs.ulList.childNodes[index];
                 var preTranslateY = li.style.transform.replace(/[^0-9\-]/ig,"") * 1
-                console.log(li.style.transform, preTranslateY)
-                if (preTranslateY) {
+                console.log(this.$refs.ulList.childNodes[index].style.transform, preTranslateY)
+                if (preTranslateY !== 0) {
                   this.$refs.ulList.childNodes[index].style.transform = `translateY(0px)`
                 } else {
                   this.$refs.ulList.childNodes[index].style.transform = `translateY(-${this.liDis}px)`
@@ -110,12 +112,13 @@ export default {
               this.moveLiPosY = yDis
               console.log('上移', this.moveIndex)
               // 上移时，当前li的index与区间index不等时，则该交叉index下移
-              if (this.moveIndex !== index + 1) {
+              if (this.moveIndex !== index + 1 && this.preIndex !== index + 1) {
                 // 获取已位移距离
+                this.preIndex = index + 1
                 var li = this.$refs.ulList.childNodes[index + 1];
                 var preTranslateY = li.style.transform.replace(/[^0-9\-]/ig,"") * 1
                 console.log(li.style.transform, preTranslateY)
-                if (preTranslateY) {
+                if (preTranslateY !== 0) {
                   this.$refs.ulList.childNodes[index + 1].style.transform = `translateY(0px)`
                 } else {
                   this.$refs.ulList.childNodes[index + 1].style.transform = `translateY(${this.liDis}px)`
