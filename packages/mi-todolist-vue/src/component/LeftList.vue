@@ -10,7 +10,7 @@
     <!-- 有数据 -->
     <div v-else class="havedata">
       <ul class="ulList" ref="ulList">
-        <li v-for="(item, index) in newData" :key="item.id" :ref="item.id" @mousedown="downMouse(item.id)" @mouseup="upMouse(item.id)">
+        <li v-for="(item, index) in newData" :index="index" :key="item.id" :ref="item.id" @mousedown="downMouse(item.id)" @mouseup="upMouse(item.id)">
           <span>{{item.title}}</span>
           <span>{{item.content}}</span>
           <span>{{item.time}}</span>
@@ -25,7 +25,8 @@ export default {
     name: "LeftList",
     data() {
       return {
-        listLiDis: [],
+        oldListLiDis: [], // 原始li距离数据数组
+        listLiDis: [], // 变化的li距离数据数组
         liPrePosition: {
           top: 0,
           left: 0
@@ -34,7 +35,7 @@ export default {
         moveIndex: 0,
         flag: true, // 只获取一次index标识
         moveLiPosY: 0,
-        preIndex: 0
+        emptyIndex: 0 // 位置空的index
       };
     },
     props: ['newData', 'chooseLeft'],
@@ -44,8 +45,17 @@ export default {
     methods: {
       docMouseUp () {
         if (this.moveLiId) {
-          this.$refs.ulList.childNodes.forEach(item => {
-            item.style.transform = 'scale(1)'
+          this.$refs.ulList.childNodes[this.moveIndex].style.transform = 'scale(1)'
+          // this.$refs.ulList.childNodes.forEach(item => {
+          //   item.style.transform = 'scale(1)'
+          // })
+          this.oldListLiDis.forEach((item, index) => {
+            var num = this.listLiDis.findIndex((li, index) => {
+              return li === item
+            })
+            if (num === -1) {
+              console.log(index)
+            }
           })
           this.$refs[this.moveLiId][0].style.zIndex = 0
           this.$refs[this.moveLiId][0].style.border = 'none'
@@ -84,57 +94,46 @@ export default {
         }
         // 判断相互位置并交换数据
         this.listLiDis.forEach((dis, index) => {
-          // 判断移动li所在位置区间
-          if (this.moveLiPositionY >= this.listLiDis[index] && this.moveLiPositionY <= this.listLiDis[index + 1]) {
-            console.log(index, index + 1)
-            // 判断在区间中是上移或下移
+          if (this.moveIndex !== index && this.moveLiPositionY >= this.listLiDis[index] - this.liDis / 2 && this.moveLiPositionY <= this.listLiDis[index] + this.liDis / 2) {
+            console.log(this.moveIndex, index)
             if (yDis - this.moveLiPosY > 0) {
+              this.moveLiPosY = yDis
               // 下移
-              // 保存移动li位置(用来判断上移或下移)
-              this.moveLiPosY = yDis
-              console.log('下移', this.moveIndex)
-              // 下移时，当前li的index与区间index不等时，则该交叉index上移
-              if (this.moveIndex !== index && this.preIndex !== index) {
-                // 获取已位移距离
-                this.preIndex = index
-                var li = this.$refs.ulList.childNodes[index];
+              console.log('下移')
+              // 判断交叉index移动
+              if (this.moveLiPositionY > this.listLiDis[index]) {
+                // 交叉index上移
+                var li = this.$refs.ulList.childNodes[index]
                 var preTranslateY = li.style.transform.replace(/[^0-9\-]/ig,"") * 1
-                console.log(this.$refs.ulList.childNodes[index].style.transform, preTranslateY)
+                console.log(preTranslateY)
                 if (preTranslateY !== 0) {
-                  this.$refs.ulList.childNodes[index].style.transform = `translateY(0px)`
+                  li.style.transform = `translateY(0px)`
+                  this.listLiDis[index] = this.oldListLiDis[index]
                 } else {
-                  this.$refs.ulList.childNodes[index].style.transform = `translateY(-${this.liDis}px)`
+                  li.style.transform = `translateY(-${this.liDis}px)`
+                  this.listLiDis[index] -= this.liDis
                 }
+                console.log(this.listLiDis)
               }
-            } else if(yDis - this.moveLiPosY < 0) {
+            } else if (yDis - this.moveLiPosY < 0) {
+              this.moveLiPosY = yDis
               // 上移
-              // 保存移动li位置(用来判断上移或下移)
-              this.moveLiPosY = yDis
-              console.log('上移', this.moveIndex)
-              // 上移时，当前li的index与区间index不等时，则该交叉index下移
-              if (this.moveIndex !== index + 1 && this.preIndex !== index + 1) {
-                // 获取已位移距离
-                this.preIndex = index + 1
-                var li = this.$refs.ulList.childNodes[index + 1];
+              console.log('上移')
+              // 判断交叉index移动
+              if (this.moveLiPositionY < this.listLiDis[index]) {
+                // 交叉index下移
+                var li = this.$refs.ulList.childNodes[index]
                 var preTranslateY = li.style.transform.replace(/[^0-9\-]/ig,"") * 1
-                console.log(li.style.transform, preTranslateY)
+                console.log(preTranslateY)
                 if (preTranslateY !== 0) {
-                  this.$refs.ulList.childNodes[index + 1].style.transform = `translateY(0px)`
+                  li.style.transform = `translateY(0px)`
+                  this.listLiDis[index] = this.oldListLiDis[index]
                 } else {
-                  this.$refs.ulList.childNodes[index + 1].style.transform = `translateY(${this.liDis}px)`
+                  li.style.transform = `translateY(${this.liDis}px)`
+                  this.listLiDis[index] += this.liDis
                 }
+                console.log(this.listLiDis)
               }
-            }
-          } else {
-            // 区间之外的情况
-            if (this.moveLiPositionY < this.listLiDis[0]) {
-              // 顶部
-              console.log('顶部', index)
-              this.$refs.ulList.firstChild.style.transform = `translateY(${this.liDis}px)`
-            } else if (this.moveLiPositionY > this.listLiDis[this.listLiDis.length - 1]) {
-              // 底部
-              console.log('底部', index)
-              this.$refs.ulList.lastChild.style.transform = `translateY(-${this.liDis}px)`
             }
           }
         })
@@ -156,6 +155,8 @@ export default {
       this.$refs.ulList.childNodes.forEach(item => {
         var disData = item.offsetTop + item.clientHeight / 2
         this.listLiDis.push(disData)
+        // 保存原始li距离数据数组
+        this.oldListLiDis.push(disData)
       })
       // 给document添加mouseup事件，当鼠标释放，所有li的scale(1)
       document.addEventListener('mouseup', this.docMouseUp)
