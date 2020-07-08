@@ -1,0 +1,14 @@
+{
+  "name": "mi-todolist-vue",
+  "version": "1.0.0",
+  "description": "高仿小米便签",
+  "main": "vcolorpicker.common.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "小米便签"
+  ],
+  "author": "微风",
+  "license": "ISC"
+}

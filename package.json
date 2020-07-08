@@ -1,11 +1,17 @@
 {
   "name": "mi-todolist-vue",
-  "version": "0.1.0",
-  "private": true,
+  "version": "1.0.0",
+  "description": "高仿小米便签",
+  "keywords": [
+    "小米便签"
+  ],
+  "author": "微风",
+  "private": false,
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "lib": "vue-cli-service build --target lib --name vcolorpicker --dest lib packages/mi-todolist-vue/index.js"
   },
   "dependencies": {
     "core-js": "^3.6.5",
