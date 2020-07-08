@@ -1,6 +1,6 @@
 <template>
   <div class='mitodolistvue'>
-    <Home :controlMask="controlMask" :showMask="showMask" :chooseLeft="chooseLeft" :newData="newData" @maskDown="maskDown">
+    <Home :updateData="updateData" :controlMask="controlMask" :showMask="showMask" :chooseLeft="chooseLeft" :newData="newData" @maskDown="maskDown">
       <!-- 插槽 -->
       <template v-slot:middle>
         <div class="middle">
@@ -64,6 +64,25 @@
       },
       afterMaskLeave () {
         this.$refs.mask.style.transform = ''
+      },
+      updateData (numArr, liNodes) {
+        console.log(numArr)
+        var arr = []
+        numArr.forEach((item, index) => {
+          if (item * 1 !== index) {
+            arr[item * 1] = this.newData[index]
+          } else {
+            arr[index] = this.newData[index]
+          }
+        })
+        liNodes.forEach(item => {
+          item.style.transition = `transform 0s linear 0s`
+        })
+        this.newData = arr
+        liNodes.forEach(item => {
+          item.style.transition = ``
+          item.style.transform = ``
+        })
       }
     },
     created () {

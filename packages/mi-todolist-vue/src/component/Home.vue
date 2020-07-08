@@ -33,7 +33,7 @@
             </div>
           </div>
           <!-- 便签列表 -->
-          <LeftList :newData='newData' :chooseLeft='chooseLeft'></LeftList>
+          <LeftList :newData='newData' :chooseLeft='chooseLeft' :updateData="updateData"></LeftList>
         </div>
         <div :class="{transup: isUp}" v-else>
           <div class="search">
@@ -64,7 +64,7 @@
         isUp: false
       }
     },
-    props: ['controlMask', 'showMask', 'chooseLeft', 'newData'],
+    props: ['controlMask', 'showMask', 'chooseLeft', 'newData', 'updateData'],
     components: {
       LeftList,
       RightList,
